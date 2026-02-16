@@ -1,0 +1,36 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  }
+  
+  body {
+    @apply m-0 min-w-[320px] min-h-screen;
+    background: linear-gradient(135deg, #F5F1ED 0%, #E8F0E6 100%);
+    background-attachment: fixed;
+  }
+
+  #root {
+    @apply w-full;
+  }
+}
+
+@layer utilities {
+  /* Print styles for health records */
+  @media print {
+    body {
+      background: white !important;
+    }
+    
+    .print\:hidden {
+      display: none !important;
+    }
+    
+    @page {
+      margin: 1cm;
+    }
+  }
+}
