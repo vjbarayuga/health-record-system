@@ -1,7 +1,30 @@
-import connectDB from '../../server/config/db.js'
-import User from '../../server/models/User.js'
+import mongoose from 'mongoose'
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
+
+// Database connection
+const connectDB = async () => {
+  try {
+    if (mongoose.connections[0].readyState) {
+      return
+    }
+    await mongoose.connect(process.env.MONGODB_URI)
+    console.log('MongoDB connected')
+  } catch (error) {
+    console.error('Database connection error:', error)
+    throw error
+  }
+}
+
+// User model
+const userSchema = new mongoose.Schema({
+  name: { type: String, required: true },
+  email: { type: String, required: true, unique: true },
+  password: { type: String, required: true },
+  role: { type: String, enum: ['student', 'admin'], default: 'student' }
+}, { timestamps: true })
+
+const User = mongoose.models.User || mongoose.model('User', userSchema)
 
 export default async function handler(req, res) {
   // Set CORS headers
@@ -22,6 +45,10 @@ export default async function handler(req, res) {
     await connectDB()
     
     const { email, password } = req.body
+
+    if (!email || !password) {
+      return res.status(400).json({ message: 'Email and password are required' })
+    }
 
     // Check if user exists
     const user = await User.findOne({ email })
@@ -53,6 +80,6 @@ export default async function handler(req, res) {
     })
   } catch (error) {
     console.error('Login error:', error)
-    res.status(500).json({ message: 'Server error' })
+    res.status(500).json({ message: 'Server error', error: error.message })
   }
 }
