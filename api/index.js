@@ -2,10 +2,11 @@ import express from 'express'
 import cors from 'cors'
 import dotenv from 'dotenv'
 import bodyParser from 'body-parser'
-import connectDB from './config/db.js'
-import healthRecordRoutes from './routes/healthRecordRoutes.js'
-import authRoutes from './routes/authRoutes.js'
+import connectDB from '../server/config/db.js'
+import healthRecordRoutes from '../server/routes/healthRecordRoutes.js'
+import authRoutes from '../server/routes/authRoutes.js'
 
+// Load environment variables
 dotenv.config()
 
 const app = express()
@@ -13,9 +14,9 @@ const app = express()
 // Connect to MongoDB
 connectDB()
 
-// CORS Configuration
+// CORS Configuration for Vercel
 const corsOptions = {
-  origin: process.env.CORS_ORIGIN ? process.env.CORS_ORIGIN.split(',') : ['http://localhost:3000'],
+  origin: true, // Allow all origins for serverless
   credentials: true,
   optionsSuccessStatus: 200
 }
@@ -25,11 +26,11 @@ app.use(cors(corsOptions))
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 
-// Routes
+// API Routes
 app.use('/api/auth', authRoutes)
 app.use('/api/health-records', healthRecordRoutes)
 
-// Health check endpoint
+// Health check
 app.get('/api', (req, res) => {
   res.json({ 
     message: 'Student Health Record System API',
@@ -38,20 +39,11 @@ app.get('/api', (req, res) => {
   })
 })
 
-// Error handling middleware
+// Error handling
 app.use((err, req, res, next) => {
   console.error(err.stack)
   res.status(500).json({ message: 'Something went wrong!', error: err.message })
 })
 
-const PORT = process.env.PORT || 5000
-
-// Export for Vercel serverless
+// Export for Vercel
 export default app
-
-// Only start server if not in serverless environment
-if (process.env.VERCEL !== '1') {
-  app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`)
-  })
-}
