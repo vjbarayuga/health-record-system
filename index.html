@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Health Record System</title>
+</head>
+<body>
+    <h1>🎉 SUCCESS! Deployment Working!</h1>
+    <p>This proves the basic deployment is functioning.</p>
+    <p>Time: <script>document.write(new Date().toLocaleString())</script></p>
+    <hr>
+    <h2>Test API Endpoints:</h2>
+    <button onclick="testAPI()">Test /api endpoint</button>
+    <button onclick="testAPI2()">Test /api/test endpoint</button>
+    <div id="results"></div>
+    
+    <script>
+        async function testAPI() {
+            try {
+                const response = await fetch('/api');
+                const data = await response.json();
+                document.getElementById('results').innerHTML = 
+                    '<h3>API Test:</h3><pre>' + JSON.stringify(data, null, 2) + '</pre>';
+            } catch(e) {
+                document.getElementById('results').innerHTML = 
+                    '<h3>API Error:</h3><p style="color:red;">' + e.message + '</p>';
+            }
+        }
+        
+        async function testAPI2() {
+            try {
+                const response = await fetch('/api/test');
+                const data = await response.json();
+                document.getElementById('results').innerHTML = 
+                    '<h3>API Test 2:</h3><pre>' + JSON.stringify(data, null, 2) + '</pre>';
+            } catch(e) {
+                document.getElementById('results').innerHTML = 
+                    '<h3>API Error:</h3><p style="color:red;">' + e.message + '</p>';
+            }
+        }
+    </script>
+</body>
+</html>
