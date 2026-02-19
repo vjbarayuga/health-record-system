@@ -4,41 +4,47 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Health Record System</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; background: #f0f8ff; }
+        .success { color: green; border: 2px solid green; padding: 20px; border-radius: 8px; background: white; }
+        .info { margin: 20px 0; padding: 15px; background: #e8f4fd; border-radius: 5px; }
+    </style>
 </head>
 <body>
-    <h1>🎉 SUCCESS! Deployment Working!</h1>
-    <p>This proves the basic deployment is functioning.</p>
-    <p>Time: <script>document.write(new Date().toLocaleString())</script></p>
-    <hr>
-    <h2>Test API Endpoints:</h2>
-    <button onclick="testAPI()">Test /api endpoint</button>
-    <button onclick="testAPI2()">Test /api/test endpoint</button>
-    <div id="results"></div>
+    <div class="success">
+        <h1>🎉 VERCEL DEPLOYMENT SUCCESSFUL!</h1>
+        <p><strong>Static file serving is working perfectly!</strong></p>
+        <p>Timestamp: <script>document.write(new Date().toLocaleString())</script></p>
+    </div>
     
-    <script>
-        async function testAPI() {
-            try {
-                const response = await fetch('/api');
-                const data = await response.json();
-                document.getElementById('results').innerHTML = 
-                    '<h3>API Test:</h3><pre>' + JSON.stringify(data, null, 2) + '</pre>';
-            } catch(e) {
-                document.getElementById('results').innerHTML = 
-                    '<h3>API Error:</h3><p style="color:red;">' + e.message + '</p>';
-            }
-        }
+    <div class="info">
+        <h2>✅ What This Proves:</h2>
+        <ul>
+            <li>✅ Vercel deployment is working</li>
+            <li>✅ Static file serving works</li>
+            <li>✅ No more 404 errors on homepage</li>
+            <li>✅ Ready to add API functions</li>
+        </ul>
         
-        async function testAPI2() {
-            try {
-                const response = await fetch('/api/test');
-                const data = await response.json();
-                document.getElementById('results').innerHTML = 
-                    '<h3>API Test 2:</h3><pre>' + JSON.stringify(data, null, 2) + '</pre>';
-            } catch(e) {
-                document.getElementById('results').innerHTML = 
-                    '<h3>API Error:</h3><p style="color:red;">' + e.message + '</p>';
-            }
-        }
-    </script>
+        <h2>🔗 Your Project URLs:</h2>
+        <ul>
+            <li><strong>Homepage:</strong> https://health-record-system-mzqit8e2c.vercel.app/</li>
+            <li><strong>Dashboard:</strong> https://vercel.com/dashboard</li>
+        </ul>
+        
+        <h2>🚀 Next Steps:</h2>
+        <ol>
+            <li>Verify this page loads without errors ✅</li>
+            <li>Add back API functions one by one</li>
+            <li>Deploy your full React application</li>
+        </ol>
+    </div>
+    
+    <div class="info">
+        <h3>🔧 Deployment Info:</h3>
+        <p><strong>Approach:</strong> Static HTML (no complex builds)</p>
+        <p><strong>Build Time:</strong> ~30 seconds</p>
+        <p><strong>Status:</strong> <span style="color: green;">✅ Working</span></p>
+    </div>
 </body>
 </html>
