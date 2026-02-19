@@ -2,7 +2,9 @@ import axios from 'axios'
 import { getAuthHeader } from './authService'
 
 // Use environment variable for API URL or default to relative path
-const API_BASE_URL = import.meta.env.VITE_API_URL || ''
+const API_BASE_URL = import.meta.env.VITE_API_URL || (
+  import.meta.env.PROD ? '' : 'http://localhost:5000'
+)
 const API_URL = `${API_BASE_URL}/api/health-records`
 
 export const getHealthRecords = async () => {
