@@ -18,8 +18,15 @@ const app = express()
 // Connect to MongoDB
 connectDB()
 
+// CORS Configuration
+const corsOptions = {
+  origin: process.env.CORS_ORIGIN ? process.env.CORS_ORIGIN.split(',') : ['http://localhost:3000'],
+  credentials: true,
+  optionsSuccessStatus: 200
+}
+
 // Middleware
-app.use(cors())
+app.use(cors(corsOptions))
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 
