@@ -124,6 +124,30 @@ Open your browser and navigate to:
 http://localhost:3000
 ```
 
+## Deployment (Recommended: Two Vercel Projects)
+
+Deploy frontend and backend separately to avoid monorepo routing issues.
+
+### Backend (server)
+
+1. Vercel → New Project → Import repo
+2. Root Directory: `server`
+3. Environment Variables:
+   - `MONGODB_URI`
+   - `JWT_SECRET`
+   - `NODE_ENV=production`
+4. Deploy and copy the backend URL
+
+### Frontend (client)
+
+1. Vercel → New Project → Import repo
+2. Root Directory: `client`
+3. Build Command: `npm run build`
+4. Output Directory: `dist`
+5. Environment Variables:
+   - `VITE_API_URL=https://YOUR-BACKEND-URL`
+6. Deploy and use the frontend URL
+
 ## API Endpoints
 
 ### Health Records
