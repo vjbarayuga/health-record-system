@@ -1,49 +1,25 @@
-import express from 'express'
-import cors from 'cors'
-import dotenv from 'dotenv'
-import bodyParser from 'body-parser'
-import connectDB from '../server/config/db.js'
-import healthRecordRoutes from '../server/routes/healthRecordRoutes.js'
-import authRoutes from '../server/routes/authRoutes.js'
+export default async function handler(req, res) {
+  // Set CORS headers
+  res.setHeader('Access-Control-Allow-Origin', '*')
+  res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS')
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type')
+  
+  if (req.method === 'OPTIONS') {
+    res.status(200).end()
+    return
+  }
 
-// Load environment variables
-dotenv.config()
-
-const app = express()
-
-// Connect to MongoDB
-connectDB()
-
-// CORS Configuration for Vercel
-const corsOptions = {
-  origin: true, // Allow all origins for serverless
-  credentials: true,
-  optionsSuccessStatus: 200
+  if (req.method === 'GET') {
+    res.status(200).json({ 
+      message: 'Student Health Record System API',
+      status: 'running',
+      timestamp: new Date().toISOString(),
+      endpoints: {
+        auth: '/api/auth',
+        healthRecords: '/api/health-records'
+      }
+    })
+  } else {
+    res.status(405).json({ message: 'Method not allowed' })
+  }
 }
-
-// Middleware
-app.use(cors(corsOptions))
-app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({ extended: true }))
-
-// API Routes
-app.use('/api/auth', authRoutes)
-app.use('/api/health-records', healthRecordRoutes)
-
-// Health check
-app.get('/api', (req, res) => {
-  res.json({ 
-    message: 'Student Health Record System API',
-    status: 'running',
-    timestamp: new Date().toISOString()
-  })
-})
-
-// Error handling
-app.use((err, req, res, next) => {
-  console.error(err.stack)
-  res.status(500).json({ message: 'Something went wrong!', error: err.message })
-})
-
-// Export for Vercel
-export default app
