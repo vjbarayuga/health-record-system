@@ -5,6 +5,7 @@ import bodyParser from 'body-parser'
 import connectDB from './config/db.js'
 import healthRecordRoutes from './routes/healthRecordRoutes.js'
 import authRoutes from './routes/authRoutes.js'
+import seedRoutes from './routes/seedRoutes.js'
 
 dotenv.config()
 
@@ -28,6 +29,7 @@ app.use(bodyParser.urlencoded({ extended: true }))
 // Routes
 app.use('/api/auth', authRoutes)
 app.use('/api/health-records', healthRecordRoutes)
+app.use('/api/seed', seedRoutes)
 
 // Health check endpoint
 app.get('/api', (req, res) => {
