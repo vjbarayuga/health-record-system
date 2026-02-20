@@ -4,6 +4,7 @@ import HealthRecordsList from './components/HealthRecordsList'
 import HealthRecordDetail from './components/HealthRecordDetail'
 import Login from './components/Login'
 import Register from './components/Register'
+import SeedDatabase from './components/SeedDatabase'
 import { getHealthRecords, deleteHealthRecord } from './services/api'
 import { getCurrentUser, logout } from './services/authService'
 
@@ -147,6 +148,11 @@ function App() {
         </div>
       </header>
       
+      {/* Seed Database Admin Panel */}
+      <div className="max-w-7xl mx-auto mb-8">
+        <SeedDatabase />
+      </div>
+
       {/* Main Content */}
       <main className="bg-white/98 p-10 rounded-2xl shadow-xl border border-white/30 backdrop-blur-md min-h-[400px] max-w-7xl mx-auto">
         {viewingRecord ? (
