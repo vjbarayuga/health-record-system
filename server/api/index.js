@@ -7,27 +7,30 @@ dotenv.config()
 
 const app = express()
 
-// ============ CORS - SIMPLE & BULLETPROOF ============
-app.use(cors({
-  origin: '*',
-  credentials: false,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization']
-}))
-
-app.options('*', cors())
-
+// ============ CRITICAL: CORS FIRST - EVERYTHING ELSE DEPENDS ON THIS ============
+// Set CORS headers BEFORE any other middleware
 app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', '*')
-  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS')
-  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization')
+  // Allow all origins
+  res.header('Access-Control-Allow-Origin', req.headers.origin || '*')
+  res.header('Access-Control-Allow-Credentials', 'true')
+  res.header('Access-Control-Allow-Methods', 'GET, HEAD, PUT, PATCH, POST, DELETE, OPTIONS')
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization')
+  res.header('Access-Control-Max-Age', '86400')
+  
+  // Handle preflight
+  if (req.method === 'OPTIONS') {
+    return res.sendStatus(200)
+  }
+  
   next()
 })
 
+// Redundant but safe
+app.use(cors({ origin: '*', credentials: false }))
 app.use(bodyParser.json({ limit: '50mb' }))
 app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }))
 
-// ============ BASIC ROUTES (NO COMPLEX IMPORTS) ============
+// ============ HEALTH CHECKS ============
 app.get('/', (req, res) => {
   res.json({
     message: 'Student Health Record System API',
@@ -45,47 +48,85 @@ app.get('/api', (req, res) => {
   })
 })
 
-// ============ LOAD ROUTES ASYNCHRONOUSLY ============
-(async () => {
+// ============ AUTH ROUTES - BUILT IN (NO IMPORTS) ============
+app.post('/api/auth/login', (req, res) => {
   try {
-    console.log('Loading routes...')
-    
-    const { default: authRoutes } = await import('../routes/authRoutes.js')
-    const { default: healthRecordRoutes } = await import('../routes/healthRecordRoutes.js')
-    const { default: seedRoutes } = await import('../routes/seedRoutes.js')
-    
-    app.use('/api/auth', authRoutes)
-    app.use('/api/health-records', healthRecordRoutes)
-    app.use('/api/seed', seedRoutes)
-    
-    console.log('Routes loaded successfully')
+    res.status(500).json({
+      message: 'Login route not yet implemented',
+      details: 'Auth routes module failed to load'
+    })
   } catch (error) {
-    console.error('Failed to load routes:', error.message)
-    console.error('Stack:', error.stack)
-    
-    // Provide fallback responses
-    app.post('/api/auth/login', (req, res) => {
-      res.status(503).json({ 
-        message: 'Auth service temporarily unavailable',
-        error: process.env.NODE_ENV === 'development' ? error.message : undefined
-      })
-    })
-    
-    app.post('/api/auth/register', (req, res) => {
-      res.status(503).json({ 
-        message: 'Auth service temporarily unavailable',
-        error: process.env.NODE_ENV === 'development' ? error.message : undefined
-      })
-    })
-    
-    app.get('/api/health-records', (req, res) => {
-      res.status(503).json({ 
-        message: 'Health records service temporarily unavailable',
-        error: process.env.NODE_ENV === 'development' ? error.message : undefined
-      })
-    })
+    res.status(500).json({ message: 'Error', error: error.message })
   }
-})()
+})
+
+app.post('/api/auth/register', (req, res) => {
+  try {
+    res.status(500).json({
+      message: 'Register route not yet implemented',
+      details: 'Auth routes module failed to load'
+    })
+  } catch (error) {
+    res.status(500).json({ message: 'Error', error: error.message })
+  }
+})
+
+app.get('/api/auth/me', (req, res) => {
+  try {
+    res.status(500).json({
+      message: 'Auth routes not yet implemented',
+      details: 'Auth routes module failed to load'
+    })
+  } catch (error) {
+    res.status(500).json({ message: 'Error', error: error.message })
+  }
+})
+
+app.post('/api/auth/logout', (req, res) => {
+  try {
+    res.status(500).json({
+      message: 'Logout route not yet implemented',
+      details: 'Auth routes module failed to load'
+    })
+  } catch (error) {
+    res.status(500).json({ message: 'Error', error: error.message })
+  }
+})
+
+// ============ HEALTH RECORDS ROUTES - BUILT IN (NO IMPORTS) ============
+app.get('/api/health-records', (req, res) => {
+  try {
+    res.status(500).json({
+      message: 'Health records not yet implemented',
+      details: 'Health records module failed to load'
+    })
+  } catch (error) {
+    res.status(500).json({ message: 'Error', error: error.message })
+  }
+})
+
+app.post('/api/health-records', (req, res) => {
+  try {
+    res.status(500).json({
+      message: 'Create health record not yet implemented',
+      details: 'Health records module failed to load'
+    })
+  } catch (error) {
+    res.status(500).json({ message: 'Error', error: error.message })
+  }
+})
+
+// ============ SEED ROUTE - BUILT IN (NO IMPORTS) ============
+app.post('/api/seed', (req, res) => {
+  try {
+    res.status(500).json({
+      message: 'Seeding not yet implemented',
+      details: 'Seed module failed to load'
+    })
+  } catch (error) {
+    res.status(500).json({ message: 'Error', error: error.message })
+  }
+})
 
 // ============ 404 HANDLER ============
 app.use((req, res) => {
@@ -101,7 +142,7 @@ app.use((err, req, res, next) => {
   console.error('Error:', err)
   res.status(500).json({
     message: 'Internal server error',
-    error: process.env.NODE_ENV === 'development' ? err.message : undefined
+    error: process.env.NODE_ENV === 'development' ? err.message : 'Server error'
   })
 })
 
