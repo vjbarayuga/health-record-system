@@ -1,16 +1,14 @@
 {
   "version": 2,
-  "buildCommand": "npm install",
-  "outputDirectory": ".next",
   "functions": {
-    "api/**/*.js": {
+    "api/index.js": {
       "memory": 1024,
       "maxDuration": 60
     }
   },
   "routes": [
     {
-      "src": "/api/(.*)",
+      "src": "/(.*)",
       "dest": "/api/index.js"
     }
   ]

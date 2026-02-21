@@ -28,6 +28,11 @@ app.use(cors(corsOptions))
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 
+// Root route redirect
+app.get('/', (req, res) => {
+  res.redirect('/api')
+})
+
 // Routes
 app.use('/api/auth', authRoutes)
 app.use('/api/health-records', healthRecordRoutes)
