@@ -47,6 +47,10 @@ app.get('/', (req, res) => {
   })
 })
 
+app.get('/favicon.ico', (req, res) => {
+  res.status(204).end()
+})
+
 // Seed endpoint - direct handler
 app.post('/api/seed', async (req, res) => {
   try {
