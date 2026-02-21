@@ -13,15 +13,22 @@ const app = express()
 
 // CORS Configuration
 const corsOptions = {
-  origin: process.env.CORS_ORIGIN ? process.env.CORS_ORIGIN.split(',') : ['http://localhost:3000', 'http://localhost:5173'],
+  origin: process.env.CORS_ORIGIN 
+    ? process.env.CORS_ORIGIN.split(',').map(o => o.trim())
+    : ['http://localhost:3000', 'http://localhost:5173', 'https://health-record-system-app.vercel.app'],
   credentials: true,
-  optionsSuccessStatus: 200
+  optionsSuccessStatus: 200,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
 }
 
 // Middleware
 app.use(cors(corsOptions))
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
+
+// Handle preflight requests
+app.options('*', cors(corsOptions))
 
 // Middleware to connect DB on first request
 let dbConnected = false
@@ -36,11 +43,6 @@ app.use(async (req, res, next) => {
     }
   }
   next()
-})
-
-// Root route redirect
-app.get('/', (req, res) => {
-  res.redirect('/api')
 })
 
 // Routes

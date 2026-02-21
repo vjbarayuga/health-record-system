@@ -2,9 +2,15 @@ import axios from 'axios'
 import { getAuthHeader } from './authService'
 
 // Use environment variable for API URL or default to relative path
-const API_BASE_URL = import.meta.env.VITE_API_URL || (
+let API_BASE_URL = import.meta.env.VITE_API_URL || (
   import.meta.env.PROD ? '' : 'http://localhost:5000'
 )
+
+// Remove trailing slash if present to avoid double slashes
+if (API_BASE_URL.endsWith('/')) {
+  API_BASE_URL = API_BASE_URL.slice(0, -1)
+}
+
 const API_URL = `${API_BASE_URL}/api/health-records`
 
 export const getHealthRecords = async () => {
