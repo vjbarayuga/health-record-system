@@ -11,12 +11,14 @@ dotenv.config()
 
 const app = express()
 
-// Connect to MongoDB
-connectDB()
+// Connect to MongoDB (with error handling for serverless)
+connectDB().catch(err => {
+  console.error('MongoDB connection error:', err.message)
+})
 
 // CORS Configuration
 const corsOptions = {
-  origin: process.env.CORS_ORIGIN ? process.env.CORS_ORIGIN.split(',') : ['http://localhost:3000'],
+  origin: process.env.CORS_ORIGIN ? process.env.CORS_ORIGIN.split(',') : ['http://localhost:3000', 'http://localhost:5173'],
   credentials: true,
   optionsSuccessStatus: 200
 }
@@ -36,7 +38,8 @@ app.get('/api', (req, res) => {
   res.json({ 
     message: 'Student Health Record System API',
     status: 'running',
-    timestamp: new Date().toISOString()
+    timestamp: new Date().toISOString(),
+    environment: process.env.NODE_ENV || 'development'
   })
 })
 
