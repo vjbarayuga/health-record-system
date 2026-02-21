@@ -5,13 +5,10 @@
   "env": {
     "VITE_API_URL": "https://health-record-system-api.vercel.app"
   },
-  "routes": [
+  "rewrites": [
     {
-      "handle": "filesystem"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/index.html"
+      "source": "/((?!assets/|.*\\..*).*)",
+      "destination": "/index.html"
     }
   ]
 }
