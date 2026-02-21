@@ -4,7 +4,6 @@ import dotenv from 'dotenv'
 import bodyParser from 'body-parser'
 import authRoutes from '../routes/authRoutes.js'
 import healthRecordRoutes from '../routes/healthRecordRoutes.js'
-import seedRoutes from '../routes/seedRoutes.js'
 
 dotenv.config()
 
@@ -162,6 +161,8 @@ app.use((err, req, res, next) => {
   })
 })
 
+// Export for Vercel
 export default app
+
 
 
