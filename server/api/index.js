@@ -1,89 +1,80 @@
-export default function handler(req, res) {
-  // ============ CORS HEADERS - ABSOLUTE FIRST ============
-  res.setHeader('Access-Control-Allow-Origin', '*')
-  res.setHeader('Access-Control-Allow-Methods', 'GET, HEAD, PUT, PATCH, POST, DELETE, OPTIONS')
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, Accept, X-Requested-With')
-  res.setHeader('Access-Control-Max-Age', '86400')
-  
-  // Handle OPTIONS preflight immediately
-  if (req.method === 'OPTIONS') {
-    return res.status(200).end()
-  }
+import express from 'express'
+import cors from 'cors'
+import dotenv from 'dotenv'
+import bodyParser from 'body-parser'
+import authRoutes from '../routes/authRoutes.js'
+import healthRecordRoutes from '../routes/healthRecordRoutes.js'
+import seedRoutes from '../routes/seedRoutes.js'
 
-  // ============ ROUTES ============
-  const { method, url } = req
-  
-  // Health check
-  if (url === '/' || url === '/api') {
-    return res.status(200).json({
-      message: 'Student Health Record System API',
-      status: 'running',
-      timestamp: new Date().toISOString(),
-      environment: process.env.NODE_ENV || 'development'
-    })
-  }
-  
-  // Login
-  if (url === '/api/auth/login' && method === 'POST') {
-    return res.status(500).json({
-      message: 'Login not yet implemented',
-      error: 'Auth routes module failed to load'
-    })
-  }
-  
-  // Register
-  if (url === '/api/auth/register' && method === 'POST') {
-    return res.status(500).json({
-      message: 'Register not yet implemented',
-      error: 'Auth routes module failed to load'
-    })
-  }
-  
-  // Get me
-  if (url === '/api/auth/me' && method === 'GET') {
-    return res.status(500).json({
-      message: 'Get user not yet implemented',
-      error: 'Auth routes module failed to load'
-    })
-  }
-  
-  // Logout
-  if (url === '/api/auth/logout' && method === 'POST') {
-    return res.status(500).json({
-      message: 'Logout not yet implemented',
-      error: 'Auth routes module failed to load'
-    })
-  }
-  
-  // Get health records
-  if (url === '/api/health-records' && method === 'GET') {
-    return res.status(500).json({
-      message: 'Get health records not yet implemented',
-      error: 'Health records module failed to load'
-    })
-  }
-  
-  // Create health record
-  if (url === '/api/health-records' && method === 'POST') {
-    return res.status(500).json({
-      message: 'Create health record not yet implemented',
-      error: 'Health records module failed to load'
-    })
-  }
-  
-  // Seed
-  if (url === '/api/seed' && method === 'POST') {
-    return res.status(500).json({
-      message: 'Seeding not yet implemented',
-      error: 'Seed module failed to load'
-    })
-  }
-  
-  // 404
+dotenv.config()
+
+const app = express()
+
+// ============ CORS ============
+app.use(cors({
+  origin: '*',
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+  credentials: false,
+  optionsSuccessStatus: 200
+}))
+
+app.options('*', cors())
+app.use(bodyParser.json({ limit: '50mb' }))
+app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }))
+
+// ============ EXPLICIT CORS HEADERS ============
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*')
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS')
+  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Accept')
+  next()
+})
+
+// ============ ROUTES ============
+app.get('/api', (req, res) => {
+  res.json({
+    message: 'Student Health Record System API',
+    status: 'running',
+    timestamp: new Date().toISOString(),
+    environment: process.env.NODE_ENV || 'development'
+  })
+})
+
+app.get('/', (req, res) => {
+  res.json({
+    message: 'Student Health Record System API',
+    status: 'running',
+    timestamp: new Date().toISOString()
+  })
+})
+
+// Import and use routes
+try {
+  app.use('/api/auth', authRoutes)
+  app.use('/api/health-records', healthRecordRoutes)
+  app.use('/api/seed', seedRoutes)
+  console.log('Routes loaded successfully')
+} catch (error) {
+  console.error('Failed to load routes:', error.message)
+}
+
+// ============ 404 ============
+app.use((req, res) => {
   res.status(404).json({
     message: 'Endpoint not found',
-    path: url,
-    method: method
+    path: req.path
   })
-}
+})
+
+// ============ ERROR HANDLER ============
+app.use((err, req, res, next) => {
+  console.error('Error:', err)
+  res.status(500).json({
+    message: 'Internal server error',
+    error: process.env.NODE_ENV === 'development' ? err.message : 'Server error'
+  })
+})
+
+export default app
+
 
