@@ -11,11 +11,6 @@ dotenv.config()
 
 const app = express()
 
-// Connect to MongoDB (with error handling for serverless)
-connectDB().catch(err => {
-  console.error('MongoDB connection error:', err.message)
-})
-
 // CORS Configuration
 const corsOptions = {
   origin: process.env.CORS_ORIGIN ? process.env.CORS_ORIGIN.split(',') : ['http://localhost:3000', 'http://localhost:5173'],
@@ -27,6 +22,21 @@ const corsOptions = {
 app.use(cors(corsOptions))
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
+
+// Middleware to connect DB on first request
+let dbConnected = false
+app.use(async (req, res, next) => {
+  if (!dbConnected && process.env.MONGODB_URI) {
+    try {
+      await connectDB()
+      dbConnected = true
+    } catch (error) {
+      console.error('Failed to connect to MongoDB on request:', error.message)
+      // Continue anyway - routes that need DB will fail individually
+    }
+  }
+  next()
+})
 
 // Root route redirect
 app.get('/', (req, res) => {
