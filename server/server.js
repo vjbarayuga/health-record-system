@@ -11,24 +11,29 @@ dotenv.config()
 
 const app = express()
 
-// CORS Configuration
+// CORS Configuration - More permissive for Vercel
 const corsOptions = {
-  origin: process.env.CORS_ORIGIN 
-    ? process.env.CORS_ORIGIN.split(',').map(o => o.trim())
-    : ['http://localhost:3000', 'http://localhost:5173', 'https://health-record-system-app.vercel.app'],
+  origin: true, // Allow all origins for now
   credentials: true,
   optionsSuccessStatus: 200,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization']
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'Accept']
 }
 
-// Middleware
+// Middleware - Order matters!
 app.use(cors(corsOptions))
-app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({ extended: true }))
-
-// Handle preflight requests
 app.options('*', cors(corsOptions))
+app.use(bodyParser.json({ limit: '50mb' }))
+app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }))
+
+// Add explicit CORS headers as fallback
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', req.headers.origin || '*')
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS, PATCH')
+  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Accept')
+  res.header('Access-Control-Allow-Credentials', 'true')
+  next()
+})
 
 // Middleware to connect DB on first request
 let dbConnected = false
