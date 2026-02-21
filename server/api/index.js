@@ -11,25 +11,31 @@ dotenv.config()
 
 const app = express()
 
-// ============ CRITICAL: CORS MUST BE FIRST ============
-// Handle preflight OPTIONS requests immediately
-app.use(cors({
-  origin: '*',
-  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
-  credentials: false,
-  optionsSuccessStatus: 200
-}))
+// ============ MOST CRITICAL: CORS FIRST ============
+const corsOptions = {
+  origin: function (origin, callback) {
+    callback(null, true)
+  },
+  credentials: true,
+  optionsSuccessStatus: 200,
+  methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'Accept', 'X-Requested-With']
+}
 
-// Explicit CORS headers as backup
+// Apply CORS globally
+app.use(cors(corsOptions))
+
+// Explicitly handle OPTIONS for all routes
+app.options('*', cors(corsOptions))
+
+// Raw header fallback
 app.use((req, res, next) => {
-  res.set('Access-Control-Allow-Origin', '*')
-  res.set('Access-Control-Allow-Methods', 'GET, HEAD, PUT, PATCH, POST, DELETE, OPTIONS')
-  res.set('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization')
-  res.set('Access-Control-Max-Age', '86400')
-  
-  if (req.method === 'OPTIONS') {
-    return res.status(200).end()
-  }
+  const origin = req.headers.origin || '*'
+  res.header('Access-Control-Allow-Origin', origin)
+  res.header('Access-Control-Allow-Credentials', 'true')
+  res.header('Access-Control-Allow-Methods', 'GET, HEAD, PUT, PATCH, POST, DELETE, OPTIONS')
+  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Accept, X-Requested-With')
+  res.header('Access-Control-Max-Age', '86400')
   next()
 })
 
@@ -75,10 +81,11 @@ app.get('/api', (req, res) => {
   })
 })
 
-// ============ ROUTES ============
-app.use('/api/auth', authRoutes)
-app.use('/api/health-records', healthRecordRoutes)
-app.use('/api/seed', seedRoutes)
+// ============ ROUTES (WITH EXPLICIT CORS) ============
+// Wrapped with CORS to be absolutely sure
+app.use('/api/auth', cors(corsOptions), authRoutes)
+app.use('/api/health-records', cors(corsOptions), healthRecordRoutes)
+app.use('/api/seed', cors(corsOptions), seedRoutes)
 
 // ============ 404 & ERROR HANDLERS ============
 app.use((req, res) => {
