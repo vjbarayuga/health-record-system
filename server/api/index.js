@@ -48,11 +48,98 @@ app.get('/', (req, res) => {
   })
 })
 
+// Seed endpoint - direct handler
+app.post('/api/seed', async (req, res) => {
+  try {
+    console.log('Seed endpoint called')
+    
+    // Try to connect to DB and seed
+    const { default: connectDB } = await import('../config/db.js')
+    const { default: HealthRecord } = await import('../models/HealthRecord.js')
+    
+    // Connect DB
+    await connectDB()
+    
+    // Check if records exist
+    const count = await HealthRecord.countDocuments()
+    if (count > 0) {
+      return res.status(400).json({
+        success: false,
+        message: `Database already contains ${count} records`
+      })
+    }
+    
+    // Sample data
+    const sampleRecords = [
+      {
+        personalInfo: {
+          lastname: 'Dela Cruz',
+          firstname: 'Maria',
+          middlename: 'Santos',
+          age: 20,
+          courseAndYear: 'BS Nursing - 2nd Year',
+          birthday: '2005-05-15',
+          sex: 'Female',
+          permanentAddress: '123 Main Street, Manila, Philippines',
+          phoneNumber: '09171234567',
+          civilStatus: 'Single',
+          religion: 'Roman Catholic',
+          contactPerson: 'Juan Dela Cruz',
+          contactAddress: '123 Main Street, Manila, Philippines',
+          contactNumber: '09189876543'
+        },
+        assessment: 'Healthy female student',
+        remarks: 'No concerns'
+      },
+      {
+        personalInfo: {
+          lastname: 'Santos',
+          firstname: 'Juan',
+          middlename: 'Reyes',
+          age: 22,
+          courseAndYear: 'BS Information Technology - 3rd Year',
+          birthday: '2003-08-22',
+          sex: 'Male',
+          permanentAddress: '456 Oak Avenue, Quezon City, Philippines',
+          phoneNumber: '09095551234',
+          civilStatus: 'Single',
+          religion: 'Roman Catholic',
+          contactPerson: 'Rosa Santos',
+          contactAddress: '456 Oak Avenue, Quezon City, Philippines',
+          contactNumber: '09215556789'
+        },
+        assessment: 'Healthy male student',
+        remarks: 'Follow up recommended'
+      }
+    ]
+    
+    // Insert
+    const result = await HealthRecord.insertMany(sampleRecords)
+    
+    res.json({
+      success: true,
+      message: `Successfully seeded ${result.length} health records`,
+      insertedCount: result.length,
+      records: result.map(r => ({
+        id: r._id,
+        name: `${r.personalInfo.firstname} ${r.personalInfo.lastname}`,
+        courseAndYear: r.personalInfo.courseAndYear
+      }))
+    })
+  } catch (error) {
+    console.error('Seed error:', error.message)
+    res.status(500).json({
+      success: false,
+      message: 'Failed to seed database',
+      error: error.message
+    })
+  }
+})
+
 // Import and use routes
 try {
   app.use('/api/auth', authRoutes)
   app.use('/api/health-records', healthRecordRoutes)
-  app.use('/api/seed', seedRoutes)
   console.log('Routes loaded successfully')
 } catch (error) {
   console.error('Failed to load routes:', error.message)
