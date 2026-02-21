@@ -11,20 +11,28 @@ dotenv.config()
 
 const app = express()
 
-// ============ CORS SETUP (CRITICAL - MUST BE FIRST) ============
+// ============ CRITICAL: CORS MUST BE FIRST ============
+// Handle preflight OPTIONS requests immediately
+app.use(cors({
+  origin: '*',
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+  credentials: false,
+  optionsSuccessStatus: 200
+}))
+
+// Explicit CORS headers as backup
 app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', '*')
-  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS, PATCH, HEAD')
-  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Accept, X-Requested-With')
-  res.header('Access-Control-Max-Age', '86400')
+  res.set('Access-Control-Allow-Origin', '*')
+  res.set('Access-Control-Allow-Methods', 'GET, HEAD, PUT, PATCH, POST, DELETE, OPTIONS')
+  res.set('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization')
+  res.set('Access-Control-Max-Age', '86400')
   
   if (req.method === 'OPTIONS') {
-    return res.sendStatus(200)
+    return res.status(200).end()
   }
   next()
 })
 
-app.use(cors({ origin: '*', credentials: false }))
 app.use(bodyParser.json({ limit: '50mb' }))
 app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }))
 
@@ -33,12 +41,11 @@ let dbConnected = false
 
 const initDB = async () => {
   if (dbConnected) return
-  
   try {
     await connectDB()
     dbConnected = true
   } catch (error) {
-    console.error('MongoDB connection error:', error.message)
+    console.error('DB init failed:', error.message)
   }
 }
 
@@ -50,8 +57,15 @@ app.use(async (req, res, next) => {
   next()
 })
 
-// ============ ROUTES ============
-// Health check - no DB needed
+// ============ ROOT & HEALTH CHECK ============
+app.get('/', (req, res) => {
+  res.json({
+    message: 'Student Health Record System API',
+    status: 'running',
+    timestamp: new Date().toISOString()
+  })
+})
+
 app.get('/api', (req, res) => {
   res.json({
     message: 'Student Health Record System API',
@@ -61,20 +75,26 @@ app.get('/api', (req, res) => {
   })
 })
 
-// Import actual routes
+// ============ ROUTES ============
 app.use('/api/auth', authRoutes)
 app.use('/api/health-records', healthRecordRoutes)
 app.use('/api/seed', seedRoutes)
 
-// 404 handler
+// ============ 404 & ERROR HANDLERS ============
 app.use((req, res) => {
-  res.status(404).json({ message: 'API endpoint not found', path: req.path })
+  res.status(404).json({ 
+    message: 'Endpoint not found', 
+    path: req.path,
+    method: req.method
+  })
 })
 
-// Error handler
 app.use((err, req, res, next) => {
-  console.error('Error:', err)
-  res.status(500).json({ message: 'Internal server error', error: err.message })
+  console.error('Error:', err.stack)
+  res.status(500).json({ 
+    message: 'Internal server error', 
+    error: err.message 
+  })
 })
 
 export default app
