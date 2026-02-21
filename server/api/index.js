@@ -53,8 +53,8 @@ app.post('/api/seed', async (req, res) => {
     console.log('Seed endpoint called')
     
     // Try to connect to DB and seed
-    const { default: connectDB } = await import('../config/db.js')
-    const { default: HealthRecord } = await import('../models/HealthRecord.js')
+    const connectDB = (await import('../config/db.js')).default
+    const HealthRecord = (await import('../models/HealthRecord.js')).default
     
     // Connect DB
     await connectDB()
