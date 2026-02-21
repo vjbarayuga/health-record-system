@@ -2,7 +2,7 @@ import axios from 'axios'
 
 // Use environment variable for API URL or default to relative path
 let API_BASE_URL = import.meta.env.VITE_API_URL || (
-  import.meta.env.PROD ? '' : 'http://localhost:5000'
+  import.meta.env.PROD ? 'https://health-record-system-api.vercel.app' : 'http://localhost:5000'
 )
 
 // Remove trailing slash if present to avoid double slashes

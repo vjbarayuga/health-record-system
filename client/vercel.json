@@ -4,11 +4,5 @@
   "outputDirectory": "dist",
   "env": {
     "VITE_API_URL": "https://health-record-system-api.vercel.app"
-  },
-  "rewrites": [
-    {
-      "source": "/((?!assets/|.*\\..*).*)",
-      "destination": "/index.html"
-    }
-  ]
+  }
 }
