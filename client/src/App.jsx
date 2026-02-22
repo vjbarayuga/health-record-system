@@ -15,6 +15,7 @@ function App() {
   const [editingRecord, setEditingRecord] = useState(null)
   const [viewingRecord, setViewingRecord] = useState(null)
   const [showForm, setShowForm] = useState(false)
+  const [showAdminMenu, setShowAdminMenu] = useState(false)
 
   useEffect(() => {
     // Check if user is logged in
@@ -58,6 +59,7 @@ function App() {
     setShowForm(false)
     setViewingRecord(null)
     setEditingRecord(null)
+    setShowAdminMenu(false)
   }
 
   const handleEdit = (record) => {
@@ -132,6 +134,28 @@ function App() {
                 ← View All Records
               </button>
             )}
+            <div className="relative">
+              <button
+                className="bg-ispsc-maroon text-white px-4 py-2.5 rounded-lg text-sm font-semibold shadow hover:bg-ispsc-dark-maroon hover:-translate-y-0.5 transition-all duration-300"
+                onClick={() => setShowAdminMenu((prev) => !prev)}
+              >
+                Admin Menu
+              </button>
+              {showAdminMenu && (
+                <div className="absolute right-0 mt-3 w-[360px] bg-white/98 border border-ispsc-maroon/10 rounded-2xl shadow-xl p-5 z-50">
+                  <div className="flex items-center justify-between mb-4">
+                    <h2 className="text-lg font-bold text-gray-800">Admin Tools</h2>
+                    <button
+                      className="text-sm text-gray-600 hover:text-gray-900 font-semibold"
+                      onClick={() => setShowAdminMenu(false)}
+                    >
+                      Close
+                    </button>
+                  </div>
+                  <SeedDatabase />
+                </div>
+              )}
+            </div>
             <div className="flex items-center gap-3 px-5 py-2.5 bg-gradient-to-br from-gray-50 to-gray-100 rounded-full border border-ispsc-maroon/10 shadow-md">
               <span className="font-semibold text-gray-800 text-sm">👤 {user.name}</span>
               <span className="text-ispsc-maroon text-xs uppercase font-semibold tracking-wide px-2 py-1 bg-ispsc-maroon/10 rounded-xl">
@@ -147,11 +171,7 @@ function App() {
           </div>
         </div>
       </header>
-      
-      {/* Seed Database Admin Panel */}
-      <div className="max-w-7xl mx-auto mb-8">
-        <SeedDatabase />
-      </div>
+
 
       {/* Main Content */}
       <main className="bg-white/98 p-10 rounded-2xl shadow-xl border border-white/30 backdrop-blur-md min-h-[400px] max-w-7xl mx-auto">
