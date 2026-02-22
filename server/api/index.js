@@ -31,7 +31,18 @@ app.use(async (req, res, next) => {
       dbConnected = true
     } catch (error) {
       console.error('MongoDB connection failed:', error.message)
+      req.dbError = error
     }
+  }
+  next()
+})
+
+app.use((req, res, next) => {
+  if (req.path.startsWith('/api') && req.path !== '/api' && !dbConnected) {
+    return res.status(503).json({
+      message: 'Database unavailable',
+      error: req.dbError?.message || 'MongoDB connection not ready'
+    })
   }
   next()
 })

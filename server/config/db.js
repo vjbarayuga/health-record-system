@@ -2,6 +2,9 @@ import mongoose from 'mongoose'
 
 let isConnected = false
 
+// Fail fast if DB is unavailable instead of buffering operations
+mongoose.set('bufferCommands', false)
+
 const connectDB = async () => {
   if (isConnected) {
     console.log('Using existing MongoDB connection')
@@ -10,7 +13,8 @@ const connectDB = async () => {
 
   try {
     const conn = await mongoose.connect(process.env.MONGODB_URI, {
-      serverSelectionTimeoutMS: 5000
+      serverSelectionTimeoutMS: 20000,
+      connectTimeoutMS: 20000
     })
     isConnected = conn.connection.readyState === 1
     console.log(`MongoDB Connected: ${conn.connection.host}`)
