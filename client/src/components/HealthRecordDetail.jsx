@@ -2,6 +2,16 @@ import React from 'react'
 
 const HealthRecordDetail = ({ record, onEdit, onDelete, onBack }) => {
   const maternalHistory = record?.maternalMenstrualHistory || {}
+  const physicalExam = record?.physicalExamination || {}
+  const generalSurvey = physicalExam.generalSurvey || {}
+  const integumentary = physicalExam.integumentary || {}
+  const chest = physicalExam.chest || {}
+  const heart = physicalExam.heart || {}
+  const abdomen = physicalExam.abdomen || {}
+  const vitalSigns = physicalExam.vitalSigns || {}
+  const heent = physicalExam.heent || {}
+  const extremities = physicalExam.extremities || {}
+  const visualAcuity = physicalExam.visualAcuity || {}
   const handlePrint = () => {
     window.print()
   }
@@ -297,65 +307,65 @@ const HealthRecordDetail = ({ record, onEdit, onDelete, onBack }) => {
           <div className="mb-6">
             <h4 className="text-lg font-semibold text-gray-700 mb-3">General Survey</h4>
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
-              {renderCheckboxField('Conscious', record.physicalExamination.generalSurvey.conscious)}
-              {renderCheckboxField('Coherent', record.physicalExamination.generalSurvey.coherent)}
-              {renderCheckboxField('Afebrile', record.physicalExamination.generalSurvey.afebrile)}
-              {renderCheckboxField('Febrile', record.physicalExamination.generalSurvey.febrile)}
-              {renderCheckboxField('Not in CPD', record.physicalExamination.generalSurvey.notInCPD)}
+              {renderCheckboxField('Conscious', generalSurvey.conscious)}
+              {renderCheckboxField('Coherent', generalSurvey.coherent)}
+              {renderCheckboxField('Afebrile', generalSurvey.afebrile)}
+              {renderCheckboxField('Febrile', generalSurvey.febrile)}
+              {renderCheckboxField('Not in CPD', generalSurvey.notInCPD)}
             </div>
           </div>
 
           <div className="mb-6">
             <h4 className="text-lg font-semibold text-gray-700 mb-3">Integumentary</h4>
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
-              {renderCheckboxField('Pallor', record.physicalExamination.integumentary.pallor)}
-              {renderCheckboxField('Jaundice', record.physicalExamination.integumentary.jaundice)}
-              {renderCheckboxField('Cyanosis', record.physicalExamination.integumentary.cyanosis)}
-              {renderCheckboxField('Warm to Touch', record.physicalExamination.integumentary.warmToTouch)}
+              {renderCheckboxField('Pallor', integumentary.pallor)}
+              {renderCheckboxField('Jaundice', integumentary.jaundice)}
+              {renderCheckboxField('Cyanosis', integumentary.cyanosis)}
+              {renderCheckboxField('Warm to Touch', integumentary.warmToTouch)}
             </div>
           </div>
 
           <div className="mb-6">
             <h4 className="text-lg font-semibold text-gray-700 mb-3">Chest</h4>
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
-              {renderCheckboxField('Retractions', record.physicalExamination.chest.retractions)}
-              {renderCheckboxField('Symmetrical Chest Expansion', record.physicalExamination.chest.symmetricalChestExpansion)}
-              {renderCheckboxField('Asymmetrical Chest Expansion', record.physicalExamination.chest.asymmetricalChestExpansion)}
-              {renderCheckboxField('Rales', record.physicalExamination.chest.rales)}
-              {renderCheckboxField('Wheezes', record.physicalExamination.chest.wheezes)}
+              {renderCheckboxField('Retractions', chest.retractions)}
+              {renderCheckboxField('Symmetrical Chest Expansion', chest.symmetricalChestExpansion)}
+              {renderCheckboxField('Asymmetrical Chest Expansion', chest.asymmetricalChestExpansion)}
+              {renderCheckboxField('Rales', chest.rales)}
+              {renderCheckboxField('Wheezes', chest.wheezes)}
             </div>
           </div>
 
           <div className="mb-6">
             <h4 className="text-lg font-semibold text-gray-700 mb-3">Heart</h4>
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
-              {renderCheckboxField('Adynamic', record.physicalExamination.heart.adynamic)}
-              {renderCheckboxField('Precordium', record.physicalExamination.heart.precordium)}
-              {renderCheckboxField('Tachycardic', record.physicalExamination.heart.tachycardic)}
-              {renderCheckboxField('Irregular Rhythm', record.physicalExamination.heart.irregularRhythm)}
-              {renderCheckboxField('Regular Rhythm', record.physicalExamination.heart.regularRhythm)}
-              {renderCheckboxField('Murmur', record.physicalExamination.heart.murmur)}
+              {renderCheckboxField('Adynamic', heart.adynamic)}
+              {renderCheckboxField('Precordium', heart.precordium)}
+              {renderCheckboxField('Tachycardic', heart.tachycardic)}
+              {renderCheckboxField('Irregular Rhythm', heart.irregularRhythm)}
+              {renderCheckboxField('Regular Rhythm', heart.regularRhythm)}
+              {renderCheckboxField('Murmur', heart.murmur)}
             </div>
             <div className="flex flex-col mt-3">
               <strong className="text-sm text-gray-600">PMI at:</strong>
-              <span className="text-gray-800 font-medium">{record.physicalExamination.heart.pmiAt || 'N/A'}</span>
+              <span className="text-gray-800 font-medium">{heart.pmiAt || 'N/A'}</span>
             </div>
           </div>
 
           <div className="mb-6">
             <h4 className="text-lg font-semibold text-gray-700 mb-3">Abdomen</h4>
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
-              {renderCheckboxField('Scar', record.physicalExamination.abdomen.scar)}
-              {renderCheckboxField('Flat', record.physicalExamination.abdomen.flat)}
-              {renderCheckboxField('Flabby', record.physicalExamination.abdomen.flabby)}
-              {renderCheckboxField('Globular', record.physicalExamination.abdomen.globular)}
-              {renderCheckboxField('Scaphoid', record.physicalExamination.abdomen.scaphoid)}
-              {renderCheckboxField('Dull', record.physicalExamination.abdomen.dull)}
-              {renderCheckboxField('Tympanitic', record.physicalExamination.abdomen.tympanitic)}
-              {renderCheckboxField('Non-Tender', record.physicalExamination.abdomen.nonTender)}
-              {renderCheckboxField('Tender', record.physicalExamination.abdomen.tender)}
-              {renderCheckboxField('Organomegaly', record.physicalExamination.abdomen.organomegaly)}
-              {renderCheckboxField('NABS', record.physicalExamination.abdomen.nabs)}
+              {renderCheckboxField('Scar', abdomen.scar)}
+              {renderCheckboxField('Flat', abdomen.flat)}
+              {renderCheckboxField('Flabby', abdomen.flabby)}
+              {renderCheckboxField('Globular', abdomen.globular)}
+              {renderCheckboxField('Scaphoid', abdomen.scaphoid)}
+              {renderCheckboxField('Dull', abdomen.dull)}
+              {renderCheckboxField('Tympanitic', abdomen.tympanitic)}
+              {renderCheckboxField('Non-Tender', abdomen.nonTender)}
+              {renderCheckboxField('Tender', abdomen.tender)}
+              {renderCheckboxField('Organomegaly', abdomen.organomegaly)}
+              {renderCheckboxField('NABS', abdomen.nabs)}
             </div>
           </div>
 
@@ -364,35 +374,35 @@ const HealthRecordDetail = ({ record, onEdit, onDelete, onBack }) => {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
               <div className="flex flex-col">
                 <strong className="text-sm text-gray-600">Blood Pressure:</strong>
-                <span className="text-gray-800 font-medium">{record.physicalExamination.vitalSigns.bp || 'N/A'}</span>
+                <span className="text-gray-800 font-medium">{vitalSigns.bp || 'N/A'}</span>
               </div>
               <div className="flex flex-col">
                 <strong className="text-sm text-gray-600">Respiratory Rate:</strong>
-                <span className="text-gray-800 font-medium">{record.physicalExamination.vitalSigns.rr || 'N/A'}</span>
+                <span className="text-gray-800 font-medium">{vitalSigns.rr || 'N/A'}</span>
               </div>
               <div className="flex flex-col">
                 <strong className="text-sm text-gray-600">Temperature:</strong>
-                <span className="text-gray-800 font-medium">{record.physicalExamination.vitalSigns.temp || 'N/A'}</span>
+                <span className="text-gray-800 font-medium">{vitalSigns.temp || 'N/A'}</span>
               </div>
               <div className="flex flex-col">
                 <strong className="text-sm text-gray-600">Heart Rate:</strong>
-                <span className="text-gray-800 font-medium">{record.physicalExamination.vitalSigns.hr || 'N/A'}</span>
+                <span className="text-gray-800 font-medium">{vitalSigns.hr || 'N/A'}</span>
               </div>
               <div className="flex flex-col">
                 <strong className="text-sm text-gray-600">Weight:</strong>
-                <span className="text-gray-800 font-medium">{record.physicalExamination.vitalSigns.weight || 'N/A'} kg</span>
+                <span className="text-gray-800 font-medium">{vitalSigns.weight || 'N/A'} kg</span>
               </div>
               <div className="flex flex-col">
                 <strong className="text-sm text-gray-600">Height:</strong>
-                <span className="text-gray-800 font-medium">{record.physicalExamination.vitalSigns.height || 'N/A'} cm</span>
+                <span className="text-gray-800 font-medium">{vitalSigns.height || 'N/A'} cm</span>
               </div>
               <div className="flex flex-col">
                 <strong className="text-sm text-gray-600">BMI:</strong>
-                <span className="text-gray-800 font-medium">{record.physicalExamination.vitalSigns.bmi || 'N/A'}</span>
+                <span className="text-gray-800 font-medium">{vitalSigns.bmi || 'N/A'}</span>
               </div>
               <div className="flex flex-col">
                 <strong className="text-sm text-gray-600">Interpretation:</strong>
-                <span className="text-gray-800 font-medium">{record.physicalExamination.vitalSigns.interpretation || 'N/A'}</span>
+                <span className="text-gray-800 font-medium">{vitalSigns.interpretation || 'N/A'}</span>
               </div>
             </div>
           </div>
@@ -400,21 +410,21 @@ const HealthRecordDetail = ({ record, onEdit, onDelete, onBack }) => {
           <div className="mb-6">
             <h4 className="text-lg font-semibold text-gray-700 mb-3">HEENT</h4>
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
-              {renderCheckboxField('Symmetric', record.physicalExamination.heent.symmetric)}
-              {renderCheckboxField('Asymmetric', record.physicalExamination.heent.asymmetric)}
-              {renderCheckboxField('Alar Flaring', record.physicalExamination.heent.alarFlaring)}
-              {renderCheckboxField('Anicteric', record.physicalExamination.heent.anicteric)}
-              {renderCheckboxField('Pink Oral Mucosa', record.physicalExamination.heent.pinkOralMucosa)}
-              {renderCheckboxField('Pale Oral Mucosa', record.physicalExamination.heent.paleOralMucosa)}
-              {renderCheckboxField('CLAD', record.physicalExamination.heent.clad)}
+              {renderCheckboxField('Symmetric', heent.symmetric)}
+              {renderCheckboxField('Asymmetric', heent.asymmetric)}
+              {renderCheckboxField('Alar Flaring', heent.alarFlaring)}
+              {renderCheckboxField('Anicteric', heent.anicteric)}
+              {renderCheckboxField('Pink Oral Mucosa', heent.pinkOralMucosa)}
+              {renderCheckboxField('Pale Oral Mucosa', heent.paleOralMucosa)}
+              {renderCheckboxField('CLAD', heent.clad)}
             </div>
           </div>
 
           <div className="mb-6">
             <h4 className="text-lg font-semibold text-gray-700 mb-3">Extremities</h4>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-              {renderCheckboxField('Gross Deformities', record.physicalExamination.extremities.grossDeformities)}
-              {renderCheckboxField('Edema', record.physicalExamination.extremities.edema)}
+              {renderCheckboxField('Gross Deformities', extremities.grossDeformities)}
+              {renderCheckboxField('Edema', extremities.edema)}
             </div>
           </div>
 
@@ -423,15 +433,15 @@ const HealthRecordDetail = ({ record, onEdit, onDelete, onBack }) => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div className="flex flex-col">
                 <strong className="text-sm text-gray-600">OD (Right Eye):</strong>
-                <span className="text-gray-800 font-medium">{record.physicalExamination.visualAcuity.od || 'N/A'}</span>
+                <span className="text-gray-800 font-medium">{visualAcuity.od || 'N/A'}</span>
               </div>
               <div className="flex flex-col">
                 <strong className="text-sm text-gray-600">OS (Left Eye):</strong>
-                <span className="text-gray-800 font-medium">{record.physicalExamination.visualAcuity.os || 'N/A'}</span>
+                <span className="text-gray-800 font-medium">{visualAcuity.os || 'N/A'}</span>
               </div>
               <div className="flex flex-col">
                 <strong className="text-sm text-gray-600">OU (Both Eyes):</strong>
-                <span className="text-gray-800 font-medium">{record.physicalExamination.visualAcuity.ou || 'N/A'}</span>
+                <span className="text-gray-800 font-medium">{visualAcuity.ou || 'N/A'}</span>
               </div>
             </div>
           </div>
