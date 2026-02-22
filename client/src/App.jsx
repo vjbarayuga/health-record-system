@@ -16,6 +16,7 @@ function App() {
   const [viewingRecord, setViewingRecord] = useState(null)
   const [showForm, setShowForm] = useState(false)
   const [showAdminMenu, setShowAdminMenu] = useState(false)
+  const [showSeedPanel, setShowSeedPanel] = useState(false)
 
   useEffect(() => {
     // Check if user is logged in
@@ -60,6 +61,7 @@ function App() {
     setViewingRecord(null)
     setEditingRecord(null)
     setShowAdminMenu(false)
+    setShowSeedPanel(false)
   }
 
   const handleEdit = (record) => {
@@ -143,16 +145,24 @@ function App() {
               </button>
               {showAdminMenu && (
                 <div className="absolute right-0 mt-3 w-[360px] bg-white/98 border border-ispsc-maroon/10 rounded-2xl shadow-xl p-5 z-50">
-                  <div className="flex items-center justify-between mb-4">
-                    <h2 className="text-lg font-bold text-gray-800">Admin Tools</h2>
+                  <div className="flex items-center justify-between mb-3">
+                    <h2 className="text-base font-bold text-gray-800">Admin Menu</h2>
                     <button
-                      className="text-sm text-gray-600 hover:text-gray-900 font-semibold"
+                      className="text-xs text-gray-600 hover:text-gray-900 font-semibold"
                       onClick={() => setShowAdminMenu(false)}
                     >
                       Close
                     </button>
                   </div>
-                  <SeedDatabase />
+                  <button
+                    className="w-full text-left px-3 py-2 rounded-lg text-sm font-semibold text-gray-700 hover:bg-ispsc-maroon/10 hover:text-ispsc-maroon transition"
+                    onClick={() => {
+                      setShowSeedPanel(true)
+                      setShowAdminMenu(false)
+                    }}
+                  >
+                    Seed Database
+                  </button>
                 </div>
               )}
             </div>
@@ -171,6 +181,23 @@ function App() {
           </div>
         </div>
       </header>
+
+      {showSeedPanel && (
+        <div className="max-w-7xl mx-auto mb-8">
+          <div className="bg-white/95 border border-ispsc-maroon/10 rounded-2xl shadow-lg p-6">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-lg font-bold text-gray-800">Seed Database</h2>
+              <button
+                className="text-sm text-gray-600 hover:text-gray-900 font-semibold"
+                onClick={() => setShowSeedPanel(false)}
+              >
+                Close
+              </button>
+            </div>
+            <SeedDatabase />
+          </div>
+        </div>
+      )}
 
 
       {/* Main Content */}
