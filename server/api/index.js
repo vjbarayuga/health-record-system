@@ -2,6 +2,7 @@ import express from 'express'
 import cors from 'cors'
 import dotenv from 'dotenv'
 import bodyParser from 'body-parser'
+import connectDB from '../config/db.js'
 import authRoutes from '../routes/authRoutes.js'
 import healthRecordRoutes from '../routes/healthRecordRoutes.js'
 
@@ -20,6 +21,20 @@ app.use(cors({
 app.options('*', cors())
 app.use(bodyParser.json({ limit: '50mb' }))
 app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }))
+
+// Connect to DB once per cold start in serverless
+let dbConnected = false
+app.use(async (req, res, next) => {
+  if (!dbConnected && process.env.MONGODB_URI) {
+    try {
+      await connectDB()
+      dbConnected = true
+    } catch (error) {
+      console.error('MongoDB connection failed:', error.message)
+    }
+  }
+  next()
+})
 
 // ============ EXPLICIT CORS HEADERS ============
 app.use((req, res, next) => {
