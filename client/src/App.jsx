@@ -117,7 +117,7 @@ function App() {
   return (
     <div className="min-h-screen p-5 relative">
       {/* Header */}
-      <header className="relative z-50 bg-gradient-to-r from-white/98 to-white/95 p-6 px-10 rounded-2xl shadow-xl mb-8 border border-white/30 backdrop-blur-md hover:shadow-2xl transition-all duration-300 max-w-7xl mx-auto">
+      <header className="relative z-[1000] bg-gradient-to-r from-white/98 to-white/95 p-6 px-10 rounded-2xl shadow-xl mb-8 border border-white/30 backdrop-blur-md hover:shadow-2xl transition-all duration-300 max-w-7xl mx-auto">
         <div className="flex justify-between items-center gap-5 flex-wrap">
           <h1 className="text-ispsc-maroon text-3xl font-bold tracking-tight flex items-center gap-3">
             <span className="text-4xl drop-shadow-md">🏥</span>
@@ -143,8 +143,8 @@ function App() {
               >
                 Admin Menu
               </button>
-                {showAdminMenu && (
-                  <div className="absolute right-0 mt-3 w-[360px] bg-white/98 border border-ispsc-maroon/10 rounded-2xl shadow-xl p-5 z-[200]">
+                  {showAdminMenu && (
+                    <div className="absolute right-0 mt-3 w-[360px] bg-white/98 border border-ispsc-maroon/10 rounded-2xl shadow-xl p-5 z-[9999]">
                   <div className="flex items-center justify-between mb-3">
                     <h2 className="text-base font-bold text-gray-800">Admin Menu</h2>
                     <button
@@ -201,7 +201,7 @@ function App() {
 
 
       {/* Main Content */}
-      <main className="bg-white/98 p-10 rounded-2xl shadow-xl border border-white/30 backdrop-blur-md min-h-[400px] max-w-7xl mx-auto">
+      <main className="relative z-0 bg-white/98 p-10 rounded-2xl shadow-xl border border-white/30 backdrop-blur-md min-h-[400px] max-w-7xl mx-auto">
         {viewingRecord ? (
           <HealthRecordDetail 
             record={viewingRecord}
