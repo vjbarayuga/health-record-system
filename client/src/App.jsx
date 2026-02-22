@@ -144,7 +144,7 @@ function App() {
                 Admin Menu
               </button>
               {showAdminMenu && (
-                <div className="absolute right-0 mt-3 w-[360px] bg-white/98 border border-ispsc-maroon/10 rounded-2xl shadow-xl p-5 z-50">
+                  <div className="absolute right-0 mt-3 w-[360px] bg-white/98 border border-ispsc-maroon/10 rounded-2xl shadow-xl p-5 z-[100]">
                   <div className="flex items-center justify-between mb-3">
                     <h2 className="text-base font-bold text-gray-800">Admin Menu</h2>
                     <button
