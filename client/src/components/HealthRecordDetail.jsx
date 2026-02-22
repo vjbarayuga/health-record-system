@@ -1,6 +1,7 @@
 import React from 'react'
 
 const HealthRecordDetail = ({ record, onEdit, onDelete, onBack }) => {
+  const maternalHistory = record?.maternalMenstrualHistory || {}
   const handlePrint = () => {
     window.print()
   }
@@ -248,43 +249,43 @@ const HealthRecordDetail = ({ record, onEdit, onDelete, onBack }) => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             <div className="flex flex-col">
               <strong className="text-sm text-gray-600">Number of Pregnancy:</strong>
-              <span className="text-gray-800 font-medium">{record.maternalMenstrualHistory.numberOfPregnancy || 'N/A'}</span>
+              <span className="text-gray-800 font-medium">{maternalHistory.numberOfPregnancy || 'N/A'}</span>
             </div>
             <div className="flex flex-col">
               <strong className="text-sm text-gray-600">Number of Alive:</strong>
-              <span className="text-gray-800 font-medium">{record.maternalMenstrualHistory.numberOfAlive || 'N/A'}</span>
+              <span className="text-gray-800 font-medium">{maternalHistory.numberOfAlive || 'N/A'}</span>
             </div>
             <div className="flex flex-col">
               <strong className="text-sm text-gray-600">Number of Still Birth:</strong>
-              <span className="text-gray-800 font-medium">{record.maternalMenstrualHistory.numberOfStillBirth || 'N/A'}</span>
+              <span className="text-gray-800 font-medium">{maternalHistory.numberOfStillBirth || 'N/A'}</span>
             </div>
             <div className="flex flex-col">
               <strong className="text-sm text-gray-600">Gyne Pathology:</strong>
-              <span className="text-gray-800 font-medium">{record.maternalMenstrualHistory.gynePathology || 'N/A'}</span>
+              <span className="text-gray-800 font-medium">{maternalHistory.gynePathology || 'N/A'}</span>
             </div>
             <div className="flex flex-col">
               <strong className="text-sm text-gray-600">LMP:</strong>
-              <span className="text-gray-800 font-medium">{record.maternalMenstrualHistory.lmp || 'N/A'}</span>
+              <span className="text-gray-800 font-medium">{maternalHistory.lmp || 'N/A'}</span>
             </div>
             <div className="flex flex-col">
               <strong className="text-sm text-gray-600">Menarche:</strong>
-              <span className="text-gray-800 font-medium">{record.maternalMenstrualHistory.menarche || 'N/A'}</span>
+              <span className="text-gray-800 font-medium">{maternalHistory.menarche || 'N/A'}</span>
             </div>
             <div className="flex flex-col">
               <strong className="text-sm text-gray-600">Interval:</strong>
-              <span className="text-gray-800 font-medium">{record.maternalMenstrualHistory.interval || 'N/A'}</span>
+              <span className="text-gray-800 font-medium">{maternalHistory.interval || 'N/A'}</span>
             </div>
             <div className="flex flex-col">
               <strong className="text-sm text-gray-600">Duration:</strong>
-              <span className="text-gray-800 font-medium">{record.maternalMenstrualHistory.duration || 'N/A'}</span>
+              <span className="text-gray-800 font-medium">{maternalHistory.duration || 'N/A'}</span>
             </div>
             <div className="flex flex-col">
               <strong className="text-sm text-gray-600">Amount:</strong>
-              <span className="text-gray-800 font-medium">{record.maternalMenstrualHistory.amount || 'N/A'}</span>
+              <span className="text-gray-800 font-medium">{maternalHistory.amount || 'N/A'}</span>
             </div>
             <div className="flex flex-col">
               <strong className="text-sm text-gray-600">Symptoms:</strong>
-              <span className="text-gray-800 font-medium">{record.maternalMenstrualHistory.symptoms || 'N/A'}</span>
+              <span className="text-gray-800 font-medium">{maternalHistory.symptoms || 'N/A'}</span>
             </div>
           </div>
         </section>

@@ -171,14 +171,91 @@ const HealthRecordForm = ({ record, onSuccess, onCancel }) => {
   useEffect(() => {
     if (record) {
       // Format dates to yyyy-MM-dd for date inputs
-      const formattedRecord = {
+      const formattedPersonalInfo = {
+        ...record.personalInfo,
+        birthday: record.personalInfo?.birthday ? record.personalInfo.birthday.split('T')[0] : ''
+      }
+
+      setFormData((prev) => ({
+        ...prev,
         ...record,
         personalInfo: {
-          ...record.personalInfo,
-          birthday: record.personalInfo.birthday ? record.personalInfo.birthday.split('T')[0] : ''
+          ...prev.personalInfo,
+          ...formattedPersonalInfo
+        },
+        pastMedicalHistory: {
+          ...prev.pastMedicalHistory,
+          ...record.pastMedicalHistory
+        },
+        familyMedicalHistory: {
+          ...prev.familyMedicalHistory,
+          ...record.familyMedicalHistory
+        },
+        immunizationHistory: {
+          ...prev.immunizationHistory,
+          ...record.immunizationHistory
+        },
+        personalSocialHistory: {
+          ...prev.personalSocialHistory,
+          ...record.personalSocialHistory,
+          smoker: {
+            ...prev.personalSocialHistory.smoker,
+            ...record.personalSocialHistory?.smoker
+          },
+          alcoholDrinker: {
+            ...prev.personalSocialHistory.alcoholDrinker,
+            ...record.personalSocialHistory?.alcoholDrinker
+          },
+          illicitDrugUser: {
+            ...prev.personalSocialHistory.illicitDrugUser,
+            ...record.personalSocialHistory?.illicitDrugUser
+          }
+        },
+        maternalMenstrualHistory: {
+          ...prev.maternalMenstrualHistory,
+          ...record.maternalMenstrualHistory
+        },
+        physicalExamination: {
+          ...prev.physicalExamination,
+          ...record.physicalExamination,
+          generalSurvey: {
+            ...prev.physicalExamination.generalSurvey,
+            ...record.physicalExamination?.generalSurvey
+          },
+          integumentary: {
+            ...prev.physicalExamination.integumentary,
+            ...record.physicalExamination?.integumentary
+          },
+          chest: {
+            ...prev.physicalExamination.chest,
+            ...record.physicalExamination?.chest
+          },
+          heart: {
+            ...prev.physicalExamination.heart,
+            ...record.physicalExamination?.heart
+          },
+          abdomen: {
+            ...prev.physicalExamination.abdomen,
+            ...record.physicalExamination?.abdomen
+          },
+          vitalSigns: {
+            ...prev.physicalExamination.vitalSigns,
+            ...record.physicalExamination?.vitalSigns
+          },
+          heent: {
+            ...prev.physicalExamination.heent,
+            ...record.physicalExamination?.heent
+          },
+          extremities: {
+            ...prev.physicalExamination.extremities,
+            ...record.physicalExamination?.extremities
+          },
+          visualAcuity: {
+            ...prev.physicalExamination.visualAcuity,
+            ...record.physicalExamination?.visualAcuity
+          }
         }
-      }
-      setFormData(formattedRecord)
+      }))
     }
   }, [record])
 
